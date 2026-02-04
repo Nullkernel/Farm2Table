@@ -1,0 +1,237 @@
+:root {
+  --bg: #fafafa;
+  --card: #fff;
+  --accent: #2a7f62;
+  --text: #222;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: system-ui, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+h2{
+    font-size: 38px;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+.header {
+  background: #fff;
+  border-bottom: 1px solid #eee;
+}
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.logo { margin: 0; color: var(--accent); }
+.nav a {
+  margin: 0 0.5rem;
+  text-decoration: none;
+  color: var(--text);
+}
+.nav a:hover { color: var(--accent); }
+
+.nav navbar-button {
+    border-color: #2a7f62;
+    border-width: 5px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.card {
+  background: var(--card);
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.product-card h3 { margin: 0.25rem 0; }
+.product-card .price { color: var(--accent); font-weight: 600; }
+.product-card img.product-img {
+  width: 100%;
+  height: 150px;        /* fixed height so cards line up */
+  object-fit: cover;    /* crops nicely without distortion */
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.btn {
+  padding: 0.45rem 0.8rem;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+}
+
+.btn.primary { 
+background: var(--accent);
+color: #fff;
+font-size: 30; 
+width: 120px;
+padding: 10px 20px;
+margin: 5px 20px 5px 50px;
+}
+
+.btn.primary:hover { opacity: 0.9; }
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px dashed #ddd;
+}
+.cart-footer {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.footer {
+  text-align: center;
+  border-top: 1px solid #eee;
+  padding: 1rem 0;
+  margin-top: 2rem;
+}
+/* for +/- buttons */
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: .5rem 0;
+  border-bottom: 1px dashed #ddd;
+}
+
+.cart-info {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+.qty-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: .5rem;
+  margin-top: .5rem;
+}
+
+.qty-btn {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #ccc;
+  background: #f9f9f9;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.qty-btn:hover {
+  background: #eee;
+}
+
+.qty {
+  min-width: 20px;
+  text-align: center;
+  font-weight: bold;
+}
+
+
+.btn.small {
+  font-size: 0.8rem;
+  padding: 0.2rem 0.5rem;
+}
+
+#small-font1{
+    font-size: 12px;
+}
+
+.no-underline{
+    text-decoration: none;
+}
+
+#tagline{
+    font-size: 16px;
+    margin: auto auto 0px auto;
+}
+
+#farmer-login{
+    border-color: #ffffff;
+    border-width: 2px;
+    color: #ffffff;
+    background-color:var(--accent);
+    justify-self: center;
+    font-size: large;
+    width: 100px;
+    height: 50px;
+}
+
+#are-you-a-farmer{
+    margin-bottom: 5px;
+}
+
+.btn.secondary.small{
+    font-size: 22px;
+    color: #ffffff;
+    background-color: rgb(255, 64, 64);
+    margin-left: 50px;
+    width: 200px;
+    height: 50px;
+}
+
+.right-align {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.potential.ads{
+    margin-top: 50px;
+    border: 2px dotted;
+    width: 100%;
+    height: 500px;
+    display: flex;
+    justify-content: center;
+}
+
+#cancellation-statement{
+    margin-top: 50px;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-around; /* spreads items evenly */
+  align-items: center;
+  background-color: #fff; /* optional, style as you want */
+  padding: 10px 0;
+}
+
+.navbar-button {
+  text-decoration: none; /* remove underline */
+  color: inherit; /* keep text color consistent */
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.nav-item span {
+  font-size: 12px;
+  margin-top: 4px;
+  text-align: center;
+}
+
+.icon_text{
+    margin-top: 0px;
+    padding-top: 0px;
+}

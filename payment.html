@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Farm2Table - Payment</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9fafb;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+    header {
+      background: #4f46e5;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+    }
+    .container {
+      max-width: 600px;
+      margin: 2rem auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      color: #4f46e5;
+      margin-bottom: 1rem;
+    }
+    .payment-option {
+      display: flex;
+      align-items: center;
+      margin: 10px 0;
+    }
+    .payment-option input {
+      margin-right: 10px;
+    }
+    .balance {
+      margin: 1rem 0;
+      font-weight: bold;
+      color: green;
+    }
+    .btn {
+      display: block;
+      width: 100%;
+      margin-top: 1.5rem;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: #4f46e5;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background: #4338ca;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Secure Payment</h1>
+  </header>
+
+  <div class="container">
+    <h2>Choose Payment Method</h2>
+    <div class="payment-option">
+      <input type="radio" id="debit" name="payment" value="Debit Card" checked>
+      <label for="debit">Debit Card (Balance: <span id="balance">₹99,999</span>)</label>
+    </div>
+    <div class="payment-option">
+      <input type="radio" id="credit" name="payment" value="Credit Card">
+      <label for="credit">Credit Card</label>
+    </div>
+    <div class="payment-option">
+      <input type="radio" id="upi" name="payment" value="UPI">
+      <label for="upi">UPI</label>
+    </div>
+    <div class="payment-option">
+      <input type="radio" id="wallet" name="payment" value="Wallet">
+      <label for="wallet">Wallet</label>
+    </div>
+
+    <div class="balance">Your Cart Total: <span id="cart-total">₹0</span></div>
+    <button class="btn" onclick="processPayment()">Pay Now</button>
+  </div>
+
+  <script>
+    const BALANCE = 99999;
+
+    function getCart() {
+      return JSON.parse(localStorage.getItem("cart") || "[]");
+    }
+
+    // Load cart total
+    function loadCartTotal() {
+      const cart = getCart();
+      const products = JSON.parse(localStorage.getItem("products") || "[]"); 
+      let total = 0;
+      if (products.length > 0) {
+        cart.forEach(item => {
+          const product = products.find(p => p.id === item.id);
+          if (product) total += product.price * item.qty;
+        });
+      }
+      document.getElementById("cart-total").textContent = "₹" + total;
+      return total;
+    }
+
+    // Payment processing
+    function processPayment() {
+      const total = loadCartTotal();
+      const method = document.querySelector("input[name='payment']:checked").value;
+
+      if (method === "Debit Card" && total > BALANCE) {
+        alert("Payment Failed: Insufficient balance on Debit Card!");
+        return;
+      }
+
+      alert("Payment Successful via " + method + "!");
+      // update last order status to Paid
+      let orders = JSON.parse(localStorage.getItem("orders") || "[]");
+      if (orders.length > 0) {
+        orders[orders.length - 1].status = "Paid";
+        localStorage.setItem("orders", JSON.stringify(orders));
+      }
+      window.location.href = "delivery.html";
+    }
+
+    // preload cart total
+    loadCartTotal();
+  </script>
+</body>
+</html>

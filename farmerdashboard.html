@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f9fafb;
+      color: #333;
+    }
+
+    header {
+      background: #4f46e5;
+      color: white;
+      padding: 1rem 2rem;
+      text-align: center;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      padding: 2rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      padding: 1.5rem;
+    }
+
+    .card h3 {
+      margin-bottom: 1rem;
+      color: #4f46e5;
+    }
+
+    .produce-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .produce-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 8px 0;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+    }
+
+    .produce-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .produce-controls button {
+      background: #4f46e5;
+      color: white;
+      border: none;
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .produce-controls button:hover {
+      background: #4338ca;
+    }
+
+    .produce-controls span {
+      min-width: 50px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .save-btn {
+      display: block;
+      margin: 1rem auto 0 auto;
+      background: green;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .save-btn:hover {
+      background: darkgreen;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background: #e5e7eb;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Welcome Back Ravi Kumar</h1>
+  </header>
+
+  <main class="container">
+    <!-- Produce Stock -->
+    <div class="card">
+      <h3>Produce Stock</h3>
+      <ul class="produce-list" id="produce-list">
+        <li class="produce-item" data-item="Tomatoes 🍅">
+          <span>Tomatoes 🍅</span>
+          <div class="produce-controls">
+            <button class="decrease">-</button>
+            <span class="quantity">120</span> kg
+            <button class="increase">+</button>
+          </div>
+        </li>
+        <li class="produce-item" data-item="Potatoes 🥔">
+          <span>Potatoes 🥔</span>
+          <div class="produce-controls">
+            <button class="decrease">-</button>
+            <span class="quantity">200</span> kg
+            <button class="increase">+</button>
+          </div>
+        </li>
+        <li class="produce-item" data-item="Carrots 🥕">
+          <span>Carrots 🥕</span>
+          <div class="produce-controls">
+            <button class="decrease">-</button>
+            <span class="quantity">90</span> kg
+            <button class="increase">+</button>
+          </div>
+        </li>
+      </ul>
+      <button class="save-btn" onclick="saveStock()">Save Stock</button>
+    </div>
+
+    <!-- Weekly Profit -->
+    <div class="card">
+      <h3>Weekly Profit</h3>
+      <p style="font-size: 1.5rem; font-weight: bold;">₹22,450</p>
+      <p style="color: green;">▲ Up 12% from last week</p>
+    </div>
+
+    <!-- Profit Analysis -->
+    <div class="card" style="grid-column: span 2;">
+      <h3>Profit Analysis (Last 7 Days)</h3>
+      <canvas id="profitChart"></canvas>
+    </div>
+  </main>
+
+  <footer>
+    <small>© 2025 Farm2Table - Farmer Dashboard</small>
+  </footer>
+
+  <script>
+    // ---- Stock update logic ----
+    let holdInterval;
+
+    function changeStock(button, change) {
+      const quantitySpan = button.parentElement.querySelector(".quantity");
+      let current = parseInt(quantitySpan.textContent);
+      current = Math.max(0, current + change); // don't go below 0
+      quantitySpan.textContent = current;
+    }
+
+    function attachHoldEvents(button, change) {
+      // Single click
+      button.addEventListener("click", () => changeStock(button, change));
+
+      // Hold press
+      button.addEventListener("mousedown", () => {
+        holdInterval = setInterval(() => changeStock(button, change), 100);
+      });
+
+      // Release mouse / finger
+      ["mouseup", "mouseleave", "touchend"].forEach(evt =>
+        button.addEventListener(evt, () => clearInterval(holdInterval))
+      );
+    }
+
+    // Save stock into localStorage
+    function saveStock() {
+      const items = document.querySelectorAll(".produce-item");
+      const stockData = {};
+      items.forEach(item => {
+        const name = item.getAttribute("data-item");
+        const qty = item.querySelector(".quantity").textContent;
+        stockData[name] = qty + " kg";
+      });
+      localStorage.setItem("produceStock", JSON.stringify(stockData));
+      alert("Stock saved successfully!");
+    }
+
+    // Load stock on page load
+    function loadStock() {
+      const savedData = localStorage.getItem("produceStock");
+      if (savedData) {
+        const stockData = JSON.parse(savedData);
+        document.querySelectorAll(".produce-item").forEach(item => {
+          const name = item.getAttribute("data-item");
+          if (stockData[name]) {
+            item.querySelector(".quantity").textContent = parseInt(stockData[name]);
+          }
+        });
+      }
+    }
+
+    // Initialize buttons and stock
+    document.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll(".increase").forEach(btn => attachHoldEvents(btn, 1));
+      document.querySelectorAll(".decrease").forEach(btn => attachHoldEvents(btn, -1));
+      loadStock();
+    });
+
+    // ---- Profit Chart ----
+    const ctx = document.getElementById('profitChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        datasets: [{
+          label: 'Daily Profit (₹)',
+          data: [320, 450, 390, 520, 610, 700, 460],
+          borderColor: '#4f46e5',
+          backgroundColor: 'rgba(79,70,229,0.2)',
+          tension: 0.3,
+          fill: true,
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: true } },
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+  </script>
+</body>
+</html>
